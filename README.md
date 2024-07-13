@@ -1,6 +1,6 @@
 # Clínica multidisciplinar
 
-- Aplicação em console para o cadastro de pacientes.
+- Aplicação em console para o cadastro de pacientes
 - Cálculo automático de IMC e risco cardiovascular
 - Listagem de todos os pacientes
 - Listagem de pacientes por IMC
@@ -11,6 +11,25 @@
 ```
 Python 3.12.3
 Visual Studio Code
+```
+
+## **Cálculo do IMC**
+
+```
+Peso (em quilos) / altura² (em metros)
+```
+
+## **Cálculo do risco cardiovascular**
+
+```
+- Paciente feminino com idade >= 68 anos: +8 pontos
+- Pratica exercício regularmente: -1 ponto
+- Possui dieta saudável: -1 ponto
+- Não é fumante: 0 pontos
+- Diabético: +4 pontos
+- Pressão arterial <= 130/80: 0 pontos
+- Níveis de colesterol HDL >= 45 mg/dL: +1 ponto
+- Níveis de colesterol LDL <= 140 mg/dL: 0 pontos
 ```
 
 ## **Mestrandos**
