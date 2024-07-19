@@ -26,39 +26,78 @@ def calcular_risco_cardiovascular(paciente):
     return risco
 
 def cadastrar_paciente():
-    nome = nome_entry.get()
-    idade = int(idade_entry.get())
-    sexo = sexo_var.get()
-    peso = float(peso_entry.get())
-    altura = float(altura_entry.get())
-    exercicio_regular = exercicio_var.get()
-    dieta_saudavel = dieta_var.get()
-    nao_fumante = nao_fumante_var.get()
-    diabetico = diabetico_var.get()
-    pressao_arterial = pressao_entry.get()
-    hdl_colesterol = float(hdl_entry.get())
-    ldl_colesterol = float(ldl_entry.get())
-
-    imc = calcular_imc(peso, altura)
-    paciente = {
-        'nome': nome,
-        'idade': idade,
-        'sexo': sexo,
-        'peso': peso,
-        'altura': altura,
-        'imc': imc,
-        'exercicio_regular': exercicio_regular,
-        'dieta_saudavel': dieta_saudavel,
-        'nao_fumante': nao_fumante,
-        'diabetico': diabetico,
-        'pressao_arterial': pressao_arterial,
-        'hdl_colesterol': hdl_colesterol,
-        'ldl_colesterol': ldl_colesterol
-    }
-    paciente['risco_cardiovascular'] = calcular_risco_cardiovascular(paciente)
-    pacientes.append(paciente)
-    messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso!")
-    limpar_campos()
+    try:
+        nome = nome_entry.get()
+        if not nome:
+            raise ValueError("Nome não pode ser vazio")
+        
+        idade = idade_entry.get()
+        if idade == '' or int(idade) <= 0:
+            raise ValueError("Idade deve ser um número positivo")
+        else:
+            idade = int(idade)
+        
+        sexo = sexo_var.get()
+        if sexo not in ["m", "f"]:
+            raise ValueError("Sexo deve ser 'm' ou 'f'")
+        
+        peso = peso_entry.get()
+        if peso == '' or float(peso) <= 0:
+            raise ValueError("Peso deve ser um número positivo")
+        else:
+            peso = float(peso)
+        
+        altura = altura_entry.get()
+        if altura == '' or float(altura) <= 0:
+            raise ValueError("Altura deve ser um número positivo")
+        else:
+            altura = float(altura)
+        
+        exercicio_regular = exercicio_var.get()
+        dieta_saudavel = dieta_var.get()
+        nao_fumante = nao_fumante_var.get()
+        diabetico = diabetico_var.get()
+        
+        pressao_arterial = pressao_entry.get()
+        if not pressao_arterial:
+            raise ValueError("Pressão arterial não pode ser vazia")
+        
+        hdl_colesterol = hdl_entry.get()
+        if hdl_colesterol == '' or float(hdl_colesterol) < 0:
+            raise ValueError("HDL colesterol deve ser um número não negativo")
+        else:
+            hdl_colesterol = float(hdl_colesterol)
+        
+        ldl_colesterol = ldl_entry.get()
+        if ldl_colesterol == '' or float(ldl_colesterol) < 0:
+            raise ValueError("LDL colesterol deve ser um número não negativo")
+        else:
+            ldl_colesterol = float(ldl_colesterol)
+        
+        imc = calcular_imc(peso, altura)
+        paciente = {
+            'nome': nome,
+            'idade': idade,
+            'sexo': sexo,
+            'peso': peso,
+            'altura': altura,
+            'imc': imc,
+            'exercicio_regular': exercicio_regular,
+            'dieta_saudavel': dieta_saudavel,
+            'nao_fumante': nao_fumante,
+            'diabetico': diabetico,
+            'pressao_arterial': pressao_arterial,
+            'hdl_colesterol': hdl_colesterol,
+            'ldl_colesterol': ldl_colesterol
+            }
+        
+        paciente['risco_cardiovascular'] = calcular_risco_cardiovascular(paciente)
+        pacientes.append(paciente)
+        messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso!")
+        limpar_campos()
+        
+    except ValueError as ve:
+        messagebox.showerror("Erro de Validação", str(ve))
 
 def listar_pacientes():
     listar_todos_pacientes(pacientes)
