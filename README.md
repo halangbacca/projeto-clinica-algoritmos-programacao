@@ -1,16 +1,20 @@
 # Clínica multidisciplinar
 
-- Aplicação em console para o cadastro de pacientes
+- Aplicação para o cadastro de pacientes
 - Cálculo automático de IMC e risco cardiovascular
 - Listagem de todos os pacientes
 - Listagem de pacientes por IMC
 - Listagem de pacientes por risco cardiovascular
 
-## **Ferramentas Utilizadas para Desenvolvimento**
+<img src="/assets/main.png" alt="tela-inicial">
+
+> Tela Inicial do Sistema.
+
+## **Tecnologias Utilizadas**
 
 ```
 Python 3.12.3
-Visual Studio Code
+Tkinter
 ```
 
 ## **Cálculo do IMC**

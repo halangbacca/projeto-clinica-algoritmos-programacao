@@ -1,7 +1,7 @@
-# Importa a biblioteca para verificar qual é o SO do usuário
-import os
+import tkinter as tk
+from tkinter import ttk, messagebox
 
-# Definindo uma lista para armazenar os dados dos pacientes
+# Definindo a lista de pacientes
 pacientes = []
 
 def calcular_imc(peso, altura):
@@ -17,8 +17,6 @@ def calcular_risco_cardiovascular(paciente):
         risco -= 1
     if paciente['diabetico']:
         risco += 4
-    if not paciente['fumante']:
-        risco += 0
     if paciente['pressao_arterial'] <= 130/80:
         risco += 0
     if paciente['hdl_colesterol'] >= 45:
@@ -28,18 +26,18 @@ def calcular_risco_cardiovascular(paciente):
     return risco
 
 def cadastrar_paciente():
-    nome = input("\nNome: ")
-    idade = int(input("Idade: "))
-    sexo = input("Sexo (m/f): ").lower()
-    peso = float(input("Peso (kg): "))
-    altura = float(input("Altura (m): "))
-    exercicio_regular = input("Exercício regular? (s/n): ").lower() == 's'
-    dieta_saudavel = input("Dieta saudável? (s/n): ").lower() == 's'
-    fumante = input("Fumante? (s/n): ").lower() == 's'
-    diabetico = input("Diabético? (s/n): ").lower() == 's'
-    pressao_arterial = float(input("Pressão arterial (ex: 120/80): ").split('/')[0])
-    hdl_colesterol = float(input("HDL colesterol (mg/dL): "))
-    ldl_colesterol = float(input("LDL colesterol (mg/dL): "))
+    nome = nome_entry.get()
+    idade = int(idade_entry.get())
+    sexo = sexo_var.get()
+    peso = float(peso_entry.get())
+    altura = float(altura_entry.get())
+    exercicio_regular = exercicio_var.get()
+    dieta_saudavel = dieta_var.get()
+    nao_fumante = nao_fumante_var.get()
+    diabetico = diabetico_var.get()
+    pressao_arterial = float(pressao_entry.get())
+    hdl_colesterol = float(hdl_entry.get())
+    ldl_colesterol = float(ldl_entry.get())
 
     imc = calcular_imc(peso, altura)
     paciente = {
@@ -51,7 +49,7 @@ def cadastrar_paciente():
         'imc': imc,
         'exercicio_regular': exercicio_regular,
         'dieta_saudavel': dieta_saudavel,
-        'fumante': fumante,
+        'nao_fumante': nao_fumante,
         'diabetico': diabetico,
         'pressao_arterial': pressao_arterial,
         'hdl_colesterol': hdl_colesterol,
@@ -59,64 +57,117 @@ def cadastrar_paciente():
     }
     paciente['risco_cardiovascular'] = calcular_risco_cardiovascular(paciente)
     pacientes.append(paciente)
-    print(f"\nPaciente {nome} cadastrado com sucesso!\n")
+    messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso!")
+    limpar_campos()
 
 def listar_pacientes():
-    if len(pacientes) == 0:
-        print("\nNenhum paciente cadastrado.\n")
-    else:
-        for paciente in pacientes:
-            print(f"\nNome: {paciente['nome']}, Idade: {paciente['idade']}, IMC: {paciente['imc']:.2f}, Risco Cardiovascular: {paciente['risco_cardiovascular']}")
+    listar_todos_pacientes(pacientes)
 
 def listar_pacientes_por_imc():
-    if len(pacientes) == 0:
-        print("\nNenhum paciente cadastrado.\n")
-    else:
-        for paciente in pacientes:
-            pacientes_ordenados = sorted(pacientes, key=lambda x: x['imc'], reverse=True)
-        for paciente in pacientes_ordenados:
-            print(f"\nNome: {paciente['nome']}, IMC: {paciente['imc']:.2f}")
+    pacientes_ordenados = sorted(pacientes, key=lambda x: x['imc'], reverse=True)
+    listar_todos_pacientes(pacientes_ordenados)
 
 def listar_pacientes_por_risco():
-    if len(pacientes) == 0:
-        print("\nNenhum paciente cadastrado.\n")
-    else:
-        for paciente in pacientes:
-            pacientes_ordenados = sorted(pacientes, key=lambda x: x['risco_cardiovascular'], reverse=True)
-        for paciente in pacientes_ordenados:
-            print(f"\nNome: {paciente['nome']}, Risco Cardiovascular: {paciente['risco_cardiovascular']}")
+    pacientes_ordenados = sorted(pacientes, key=lambda x: x['risco_cardiovascular'], reverse=True)
+    listar_todos_pacientes(pacientes_ordenados)
 
-def aguardar():
-    print("\nPressione qualquer tecla para continuar...")
-    if input():
-        os.system('cls' if os.name == 'nt' else 'clear') # Limpa a tela de acordo com o SO do usuário
-        print("\n")
+def listar_todos_pacientes(pacientes_list):
+    list_window = tk.Toplevel(root)
+    list_window.title("Listagem de Pacientes")
+    tree = ttk.Treeview(list_window, columns=("nome", "idade", "imc", "risco"), show="headings")
+    tree.heading("nome", text="Nome")
+    tree.heading("idade", text="Idade")
+    tree.heading("imc", text="IMC")
+    tree.heading("risco", text="Risco Cardiovascular")
+    tree.pack(fill=tk.BOTH, expand=True)
 
-def menu():
-    while True:
-        print("Menu:")
-        print("1 - Cadastro de pacientes")
-        print("2 - Listagem de pacientes")
-        print("3 - Listagem de pacientes por IMC")
-        print("4 - Listagem de pacientes por risco cardiovascular")
-        print("5 - Sair")
-        opcao = int(input("\nEscolha uma opção: "))
-        if opcao == 1:
-            cadastrar_paciente()
-            aguardar()
-        elif opcao == 2:
-            listar_pacientes()
-            aguardar()
-        elif opcao == 3:
-            listar_pacientes_por_imc()
-            aguardar()
-        elif opcao == 4:
-            listar_pacientes_por_risco()
-            aguardar()
-        elif opcao == 5:
-            break
-        else:
-            print("\nOpção inválida. Tente novamente.\n")
-            aguardar()
+    for paciente in pacientes_list:
+        tree.insert("", "end", values=(paciente['nome'], paciente['idade'], f"{paciente['imc']:.2f}", paciente['risco_cardiovascular']))
 
-menu()
+def limpar_campos():
+    nome_entry.delete(0, tk.END)
+    idade_entry.delete(0, tk.END)
+    sexo_var.set("")
+    peso_entry.delete(0, tk.END)
+    altura_entry.delete(0, tk.END)
+    exercicio_var.set(False)
+    dieta_var.set(False)
+    nao_fumante_var.set(False)
+    diabetico_var.set(False)
+    pressao_entry.delete(0, tk.END)
+    hdl_entry.delete(0, tk.END)
+    ldl_entry.delete(0, tk.END)
+
+# Configurando a janela principal
+root = tk.Tk()
+root.title("Sistema de Cadastro de Pacientes")
+
+# Criando frames para organizar a interface
+frame1 = ttk.Frame(root, padding="10")
+frame1.grid(row=0, column=0, sticky=(tk.W, tk.E))
+
+frame2 = ttk.Frame(root, padding="10")
+frame2.grid(row=1, column=0, sticky=(tk.W, tk.E))
+
+# Frame 1: Formulário de cadastro
+ttk.Label(frame1, text="Nome:").grid(row=0, column=0, sticky=tk.W)
+nome_entry = ttk.Entry(frame1)
+nome_entry.grid(row=0, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="Idade:").grid(row=1, column=0, sticky=tk.W)
+idade_entry = ttk.Entry(frame1)
+idade_entry.grid(row=1, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="Sexo (m/f):").grid(row=2, column=0, sticky=tk.W)
+sexo_var = tk.StringVar()
+sexo_entry = ttk.Combobox(frame1, textvariable=sexo_var, values=["m", "f"])
+sexo_entry.grid(row=2, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="Peso (kg):").grid(row=3, column=0, sticky=tk.W)
+peso_entry = ttk.Entry(frame1)
+peso_entry.grid(row=3, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="Altura (m):").grid(row=4, column=0, sticky=tk.W)
+altura_entry = ttk.Entry(frame1)
+altura_entry.grid(row=4, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="Exercício regular:").grid(row=5, column=0, sticky=tk.W)
+exercicio_var = tk.BooleanVar()
+exercicio_check = ttk.Checkbutton(frame1, variable=exercicio_var)
+exercicio_check.grid(row=5, column=1, sticky=tk.W)
+
+ttk.Label(frame1, text="Dieta saudável:").grid(row=6, column=0, sticky=tk.W)
+dieta_var = tk.BooleanVar()
+dieta_check = ttk.Checkbutton(frame1, variable=dieta_var)
+dieta_check.grid(row=6, column=1, sticky=tk.W)
+
+ttk.Label(frame1, text="Não fumante:").grid(row=7, column=0, sticky=tk.W)
+nao_fumante_var = tk.BooleanVar()
+nao_fumante_check = ttk.Checkbutton(frame1, variable=nao_fumante_var)
+nao_fumante_check.grid(row=7, column=1, sticky=tk.W)
+
+ttk.Label(frame1, text="Diabético:").grid(row=8, column=0, sticky=tk.W)
+diabetico_var = tk.BooleanVar()
+diabetico_check = ttk.Checkbutton(frame1, variable=diabetico_var)
+diabetico_check.grid(row=8, column=1, sticky=tk.W)
+
+ttk.Label(frame1, text="Pressão arterial (ex: 120/80):").grid(row=9, column=0, sticky=tk.W)
+pressao_entry = ttk.Entry(frame1)
+pressao_entry.grid(row=9, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="HDL colesterol (mg/dL):").grid(row=10, column=0, sticky=tk.W)
+hdl_entry = ttk.Entry(frame1)
+hdl_entry.grid(row=10, column=1, sticky=(tk.W, tk.E))
+
+ttk.Label(frame1, text="LDL colesterol (mg/dL):").grid(row=11, column=0, sticky=tk.W)
+ldl_entry = ttk.Entry(frame1)
+ldl_entry.grid(row=11, column=1, sticky=(tk.W, tk.E))
+
+ttk.Button(frame1, text="Cadastrar Paciente", command=cadastrar_paciente).grid(row=12, column=0, columnspan=2, pady=10)
+
+# Frame 2: Botões de listagem
+ttk.Button(frame2, text="Listar Todos os Pacientes", command=listar_pacientes).grid(row=0, column=0, padx=10, pady=5)
+ttk.Button(frame2, text="Listar Pacientes por IMC", command=listar_pacientes_por_imc).grid(row=0, column=1, padx=10, pady=5)
+ttk.Button(frame2, text="Listar Pacientes por Risco Cardiovascular", command=listar_pacientes_por_risco).grid(row=0, column=2, padx=10, pady=5)
+
+root.mainloop()
