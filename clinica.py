@@ -17,7 +17,7 @@ def calcular_risco_cardiovascular(paciente):
         risco -= 1
     if paciente['diabetico']:
         risco += 4
-    if paciente['pressao_arterial'] <= 130/80:
+    if paciente['pressao_arterial'] <= '130/80':
         risco += 0
     if paciente['hdl_colesterol'] >= 45:
         risco += 1
@@ -35,7 +35,7 @@ def cadastrar_paciente():
     dieta_saudavel = dieta_var.get()
     nao_fumante = nao_fumante_var.get()
     diabetico = diabetico_var.get()
-    pressao_arterial = float(pressao_entry.get())
+    pressao_arterial = pressao_entry.get()
     hdl_colesterol = float(hdl_entry.get())
     ldl_colesterol = float(ldl_entry.get())
 
