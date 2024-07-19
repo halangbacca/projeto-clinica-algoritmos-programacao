@@ -37,7 +37,7 @@ def cadastrar_paciente():
         else:
             idade = int(idade)
         
-        sexo = sexo_var.get()
+        sexo = sexo_var.get().lower()
         if sexo not in ["m", "f"]:
             raise ValueError("Sexo deve ser 'm' ou 'f'")
         
