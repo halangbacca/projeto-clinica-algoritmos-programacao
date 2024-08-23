@@ -9,71 +9,139 @@ def calcular_imc(peso, altura):
 
 def calcular_risco_cardiovascular(paciente):
     risco = 0
-    if paciente['sexo'] == 'f' and paciente['idade'] >= 68:
-        risco += 8
+    if paciente['sexo'] == 'f':
+        if paciente['idade'] >= 68:
+            risco += 8
     if paciente['exercicio_regular']:
         risco -= 1
     if paciente['dieta_saudavel']:
         risco -= 1
     if paciente['diabetico']:
         risco += 4
-    if paciente['pressao_arterial'] <= '130/80':
-        risco += 0
     if paciente['hdl_colesterol'] >= 45:
         risco += 1
-    if paciente['ldl_colesterol'] <= 140:
-        risco += 0
+
     return risco
+
+def risco_cardiovascular_por_pontos(pontos, sexo):
+    if sexo == 'm':
+        if pontos == -3:
+            return "1%"
+        elif pontos in [-2, -1]:
+            return "2%"
+        elif pontos == 0:
+            return "3%"
+        elif pontos in [1, 2]:
+            return "4%"
+        elif pontos == 3:
+            return "6%"
+        elif pontos == 4:
+            return "7%"
+        elif pontos == 5:
+            return "9%"
+        elif pontos == 6:
+            return "11%"
+        elif pontos == 7:
+            return "14%"
+        elif pontos == 8:
+            return "18%"
+        elif pontos == 9:
+            return "22%"
+        elif pontos == 10:
+            return "27%"
+        elif pontos == 11:
+            return "33%"
+        elif pontos == 12:
+            return "40%"
+        else:
+            return "47%"
+    else:
+        if pontos < -2:
+            return "1%"
+        elif pontos in [-1, 0, 1]:
+            return "2%"
+        elif pontos in [2, 3]:
+            return "3%"
+        elif pontos == 4:
+            return "4%"
+        elif pontos == 5:
+            return "5%"
+        elif pontos == 6:
+            return "6%"
+        elif pontos == 7:
+            return "7%"
+        elif pontos == 8:
+            return "8%"
+        elif pontos == 9:
+            return "9%"
+        elif pontos == 10:
+            return "11%"
+        elif pontos == 11:
+            return "13%"
+        elif pontos == 12:
+            return "15%"
+        else:
+            return "17%"
+
+def classificar_risco_cardiovascular(percentual):
+    if percentual < 5:
+        return "Baixo"
+    elif 5 <= percentual < 7.5:
+        return "Borderline"
+    elif 7.5 <= percentual < 13:
+        return "Intermediário"
+    else:
+        return "Alto"
 
 def cadastrar_paciente():
     try:
         nome = nome_entry.get()
         if not nome:
             raise ValueError("Nome não pode ser vazio")
-        
+
         idade = idade_entry.get()
         if idade == '' or int(idade) <= 0:
             raise ValueError("Idade deve ser um número positivo")
         else:
             idade = int(idade)
-        
+
         sexo = sexo_var.get().lower()
         if sexo not in ["m", "f"]:
             raise ValueError("Sexo deve ser 'm' ou 'f'")
-        
+
         peso = peso_entry.get()
         if peso == '' or float(peso) <= 0:
             raise ValueError("Peso deve ser um número positivo")
         else:
             peso = float(peso)
-        
+
         altura = altura_entry.get()
         if altura == '' or float(altura) <= 0:
             raise ValueError("Altura deve ser um número positivo")
         else:
             altura = float(altura)
-        
+
         exercicio_regular = exercicio_var.get()
         dieta_saudavel = dieta_var.get()
-        nao_fumante = nao_fumante_var.get()
+        fumante = fumante_var.get()
         diabetico = diabetico_var.get()
-        
+
         pressao_arterial = pressao_entry.get()
         if not pressao_arterial:
             raise ValueError("Pressão arterial não pode ser vazia")
-        
+
         hdl_colesterol = hdl_entry.get()
         if hdl_colesterol == '' or float(hdl_colesterol) < 0:
             raise ValueError("HDL colesterol deve ser um número não negativo")
         else:
             hdl_colesterol = float(hdl_colesterol)
-        
+
         ldl_colesterol = ldl_entry.get()
         if ldl_colesterol == '' or float(ldl_colesterol) < 0:
             raise ValueError("LDL colesterol deve ser um número não negativo")
         else:
             ldl_colesterol = float(ldl_colesterol)
-        
+
         imc = calcular_imc(peso, altura)
         paciente = {
             'nome': nome,
@@ -84,18 +152,24 @@ def cadastrar_paciente():
             'imc': imc,
             'exercicio_regular': exercicio_regular,
             'dieta_saudavel': dieta_saudavel,
-            'nao_fumante': nao_fumante,
+            'fumante': fumante,
             'diabetico': diabetico,
             'pressao_arterial': pressao_arterial,
             'hdl_colesterol': hdl_colesterol,
             'ldl_colesterol': ldl_colesterol
-            }
-        
-        paciente['risco_cardiovascular'] = calcular_risco_cardiovascular(paciente)
+        }
+
+        pontos_risco = calcular_risco_cardiovascular(paciente)
+        percentual_risco = float(risco_cardiovascular_por_pontos(pontos_risco, sexo).replace("%", ""))
+
+        classificacao_risco = classificar_risco_cardiovascular(percentual_risco)
+
+        paciente['risco_cardiovascular'] = f"{percentual_risco}% ({classificacao_risco})"
         pacientes.append(paciente)
-        messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso!")
+
+        messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso! IMC: {imc:.2f}, Risco Cardiovascular: {paciente['risco_cardiovascular']}")
         limpar_campos()
-        
+
     except ValueError as ve:
         messagebox.showerror("Erro de Validação", str(ve))
 
@@ -131,7 +205,7 @@ def limpar_campos():
     altura_entry.delete(0, tk.END)
     exercicio_var.set(False)
     dieta_var.set(False)
-    nao_fumante_var.set(False)
+    fumante_var.set(False)
     diabetico_var.set(False)
     pressao_entry.delete(0, tk.END)
     hdl_entry.delete(0, tk.END)
@@ -180,10 +254,10 @@ dieta_var = tk.BooleanVar()
 dieta_check = ttk.Checkbutton(frame1, variable=dieta_var)
 dieta_check.grid(row=6, column=1, sticky=tk.W)
 
-ttk.Label(frame1, text="Não fumante:").grid(row=7, column=0, sticky=tk.W)
-nao_fumante_var = tk.BooleanVar()
-nao_fumante_check = ttk.Checkbutton(frame1, variable=nao_fumante_var)
-nao_fumante_check.grid(row=7, column=1, sticky=tk.W)
+ttk.Label(frame1, text="Fumante:").grid(row=7, column=0, sticky=tk.W)
+fumante_var = tk.BooleanVar()
+fumante_check = ttk.Checkbutton(frame1, variable=fumante_var)
+fumante_check.grid(row=7, column=1, sticky=tk.W)
 
 ttk.Label(frame1, text="Diabético:").grid(row=8, column=0, sticky=tk.W)
 diabetico_var = tk.BooleanVar()
