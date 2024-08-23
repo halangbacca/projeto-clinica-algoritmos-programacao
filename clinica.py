@@ -181,7 +181,8 @@ def listar_pacientes_por_imc():
     listar_todos_pacientes(pacientes_ordenados)
 
 def listar_pacientes_por_risco():
-    pacientes_ordenados = sorted(pacientes, key=lambda x: x['risco_cardiovascular'], reverse=True)
+    # Ordena os pacientes por risco cardiovascular, convertendo a string percentual em float
+    pacientes_ordenados = sorted(pacientes, key=lambda x: float(x['risco_cardiovascular'].split('%')[0]), reverse=True)
     listar_todos_pacientes(pacientes_ordenados)
 
 def listar_todos_pacientes(pacientes_list):
