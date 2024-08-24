@@ -1,6 +1,6 @@
 # Clínica multidisciplinar
 
-- Aplicação para o cadastro de pacientes
+- Cadastro de pacientes
 - Cálculo automático de IMC e risco cardiovascular
 - Listagem de todos os pacientes
 - Listagem de pacientes por IMC
@@ -36,7 +36,7 @@
 - Níveis de colesterol LDL <= 140 mg/dL: 0 pontos
 ```
 
-## **Porcentagem de risco cardiovascular ns próximos 10 anos**
+## **Percentual de risco cardiovascular nos próximos 10 anos**
 
 ### Homens:
 ```
@@ -54,7 +54,7 @@
 10 pontos: 27%
 11 pontos: 33%
 12 pontos: 40%
-13 pontos ou mais: 47%
+>= 13 pontos: 47%
 ```
 
 ### Mulheres:
@@ -76,10 +76,10 @@
 
 ## **Classificação de risco cardiovascular**
 ```
-- < 5%: baixo risco cardiovascular
-- Entre 5 e 7,5%: compõem o grupo “borderline”
-- Entre 7,5 e 12%: risco intermediário
-- >= 13%: alto risco
+< 5%: baixo risco cardiovascular
+Entre 5 e 7,5%: compõem o grupo “borderline”
+Entre 7,5 e 12%: risco cardiovascular intermediário
+>= 13%: alto risco cardiovascular
 ```
 
 ## **Mestrandos**
