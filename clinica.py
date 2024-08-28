@@ -7,6 +7,20 @@ pacientes = []
 def calcular_imc(peso, altura):
     return peso / (altura ** 2)
 
+def classificar_imc(imc):
+    if imc < 18.5:
+        return "Abaixo do peso"
+    elif 18.5 <= imc < 25:
+        return "Peso adequado"
+    elif 25 <= imc < 30:
+        return "Sobrepeso"
+    elif 30 <= imc < 35:
+        return "Obesidade grau I"
+    elif 35 <= imc < 40:
+        return "Obesidade grau II"
+    else:
+        return "Obesidade grau III"
+
 def calcular_risco_cardiovascular(paciente):
     risco = 0
     if paciente['sexo'] == 'f':
@@ -109,13 +123,13 @@ def cadastrar_paciente():
         if sexo not in ["m", "f"]:
             raise ValueError("Sexo deve ser 'm' ou 'f'")
 
-        peso = peso_entry.get()
+        peso = peso_entry.get().replace(',', '.')
         if peso == '' or float(peso) <= 0:
             raise ValueError("Peso deve ser um número positivo")
         else:
             peso = float(peso)
 
-        altura = altura_entry.get()
+        altura = altura_entry.get().replace(',', '.')
         if altura == '' or float(altura) <= 0:
             raise ValueError("Altura deve ser um número positivo")
         else:
@@ -130,26 +144,28 @@ def cadastrar_paciente():
         if not pressao_arterial:
             raise ValueError("Pressão arterial não pode ser vazia")
 
-        hdl_colesterol = hdl_entry.get()
+        hdl_colesterol = hdl_entry.get().replace(',', '.')
         if hdl_colesterol == '' or float(hdl_colesterol) < 0:
             raise ValueError("HDL colesterol deve ser um número não negativo")
         else:
             hdl_colesterol = float(hdl_colesterol)
 
-        ldl_colesterol = ldl_entry.get()
+        ldl_colesterol = ldl_entry.get().replace(',', '.')
         if ldl_colesterol == '' or float(ldl_colesterol) < 0:
             raise ValueError("LDL colesterol deve ser um número não negativo")
         else:
             ldl_colesterol = float(ldl_colesterol)
 
         imc = calcular_imc(peso, altura)
+        classificacao_imc = classificar_imc(imc)
         paciente = {
             'nome': nome,
             'idade': idade,
             'sexo': sexo,
             'peso': peso,
             'altura': altura,
-            'imc': imc,
+            'imc': imc,  # Guardar o IMC como número
+            'classificacao_imc': classificacao_imc,
             'exercicio_regular': exercicio_regular,
             'dieta_saudavel': dieta_saudavel,
             'fumante': fumante,
@@ -163,11 +179,11 @@ def cadastrar_paciente():
         percentual_risco = float(risco_cardiovascular_por_pontos(pontos_risco, sexo).replace("%", ""))
 
         classificacao_risco = classificar_risco_cardiovascular(percentual_risco)
-
         paciente['risco_cardiovascular'] = f"{percentual_risco}% ({classificacao_risco})"
+
         pacientes.append(paciente)
 
-        messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso! IMC: {imc:.2f}, Risco Cardiovascular: {paciente['risco_cardiovascular']}")
+        messagebox.showinfo("Sucesso", f"Paciente {nome} cadastrado com sucesso!\nIMC: {imc:.2f} ({classificacao_imc}),\nRisco Cardiovascular: {paciente['risco_cardiovascular']}")
         limpar_campos()
 
     except ValueError as ve:
@@ -181,7 +197,6 @@ def listar_pacientes_por_imc():
     listar_todos_pacientes(pacientes_ordenados)
 
 def listar_pacientes_por_risco():
-    # Ordena os pacientes por risco cardiovascular, convertendo a string percentual em float
     pacientes_ordenados = sorted(pacientes, key=lambda x: float(x['risco_cardiovascular'].split('%')[0]), reverse=True)
     listar_todos_pacientes(pacientes_ordenados)
 
@@ -196,7 +211,8 @@ def listar_todos_pacientes(pacientes_list):
     tree.pack(fill=tk.BOTH, expand=True)
 
     for paciente in pacientes_list:
-        tree.insert("", "end", values=(paciente['nome'], paciente['idade'], f"{paciente['imc']:.2f}", paciente['risco_cardiovascular']))
+        imc_com_classificacao = f"{paciente['imc']:.2f} ({paciente['classificacao_imc']})"
+        tree.insert("", "end", values=(paciente['nome'], paciente['idade'], imc_com_classificacao, paciente['risco_cardiovascular']))
 
 def limpar_campos():
     nome_entry.delete(0, tk.END)
