@@ -232,12 +232,21 @@ def limpar_campos():
 root = tk.Tk()
 root.title("Sistema de Cadastro de Pacientes")
 
+# Configurando a expansão das colunas e linhas na janela principal
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
+root.rowconfigure(1, weight=1)
+
 # Criando frames para organizar a interface
 frame1 = ttk.Frame(root, padding="10")
-frame1.grid(row=0, column=0, sticky=(tk.W, tk.E))
+frame1.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
 frame2 = ttk.Frame(root, padding="10")
-frame2.grid(row=1, column=0, sticky=(tk.W, tk.E))
+frame2.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+# Configurando a expansão das colunas e linhas nos frames
+frame1.columnconfigure(1, weight=1)
+frame2.columnconfigure((0, 1, 2), weight=1)
 
 # Frame 1: Formulário de cadastro
 ttk.Label(frame1, text="Nome:").grid(row=0, column=0, sticky=tk.W)
@@ -296,8 +305,8 @@ ldl_entry.grid(row=11, column=1, sticky=(tk.W, tk.E))
 ttk.Button(frame1, text="Cadastrar Paciente", command=cadastrar_paciente).grid(row=12, column=0, columnspan=2, pady=10)
 
 # Frame 2: Botões de listagem
-ttk.Button(frame2, text="Listar Todos os Pacientes", command=listar_pacientes).grid(row=0, column=0, padx=10, pady=5)
-ttk.Button(frame2, text="Listar Pacientes por IMC", command=listar_pacientes_por_imc).grid(row=0, column=1, padx=10, pady=5)
-ttk.Button(frame2, text="Listar Pacientes por Risco Cardiovascular", command=listar_pacientes_por_risco).grid(row=0, column=2, padx=10, pady=5)
+ttk.Button(frame2, text="Listar Todos os Pacientes", command=listar_pacientes).grid(row=0, column=0, padx=10, pady=5, sticky=(tk.W, tk.E))
+ttk.Button(frame2, text="Listar Pacientes por IMC", command=listar_pacientes_por_imc).grid(row=0, column=1, padx=10, pady=5, sticky=(tk.W, tk.E))
+ttk.Button(frame2, text="Listar Pacientes por Risco Cardiovascular", command=listar_pacientes_por_risco).grid(row=0, column=2, padx=10, pady=5, sticky=(tk.W, tk.E))
 
 root.mainloop()
