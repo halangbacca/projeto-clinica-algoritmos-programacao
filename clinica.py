@@ -28,12 +28,32 @@ def calcular_risco_cardiovascular(paciente):
             risco += 8
     if paciente['exercicio_regular']:
         risco -= 1
+    else:
+        risco += 1
     if paciente['dieta_saudavel']:
         risco -= 1
-    if paciente['diabetico']:
-        risco += 4
-    if paciente['hdl_colesterol'] >= 45:
+    else:
         risco += 1
+    if paciente['diabetico']:
+        risco += 4 
+    if paciente['hdl_colesterol'] >= 45:
+        risco -= 1
+
+    if paciente['dieta_saudavel']:
+        risco -= 1
+    else:
+        risco += 1
+
+    if paciente['fumante']:
+        risco += 2
+
+    if paciente['exercicio_regular']:
+        risco -= 1
+    else:
+        risco += 1
+        
+    if paciente['imc'] >= 25:
+        risco += 2
 
     return risco
 
