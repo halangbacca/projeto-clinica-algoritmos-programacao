@@ -23,6 +23,17 @@
 - Peso (em quilos) / altura² (em metros)
 ```
 
+## **Classificação do IMC**
+
+...
+<18,5 - baixo peso 
+18,5 até 24,9 - eutrofia (peso adequado) 
+≥25 até 29,9 - sobrepeso 
+>30,0 até 34,9 - obesidade grau I
+35,00 até 39,99 - obesidade grau II 
+≥40.00 - obesidade grau III
+...
+
 ## **Cálculo do risco cardiovascular**
 
 ```
@@ -30,10 +41,13 @@
 - Pratica exercício regularmente: -1 ponto
 - Possui dieta saudável: -1 ponto
 - Não é fumante: 0 pontos
+- Fumante: +2 pontos
 - Diabético: +4 pontos
 - Pressão arterial <= 130/80: 0 pontos
-- Níveis de colesterol HDL >= 45 mg/dL: +1 ponto
+- Níveis de colesterol HDL >= 45 mg/dL: -1 ponto
 - Níveis de colesterol LDL <= 140 mg/dL: 0 pontos
+- Calculo de IMC >=25: +2 pontos
+ 
 ```
 
 ## **Percentual de risco cardiovascular nos próximos 10 anos**
