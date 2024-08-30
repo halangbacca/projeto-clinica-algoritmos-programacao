@@ -6,7 +6,7 @@
 - Listagem de pacientes por IMC
 - Listagem de pacientes por risco cardiovascular
 
-<img src="/assets/main.png" alt="tela-inicial">
+<img src="/assets/main2.png" alt="tela-inicial">
 
 > Tela Inicial do Sistema.
 
