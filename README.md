@@ -25,14 +25,14 @@
 
 ## **Classificação do IMC**
 
-...
-- <18,5 - baixo peso 
-- 18,5 até 24,9 - eutrofia (peso adequado) 
-- ≥25 até 29,9 - sobrepeso 
-- >30,0 até 34,9 - obesidade grau I
-- 35,00 até 39,99 - obesidade grau II 
-- ≥40.00 - obesidade grau III
-...
+```
+<18,5 - baixo peso 
+18,5 até 24,9 - eutrofia (peso adequado) 
+≥25 até 29,9 - sobrepeso 
+>30,0 até 34,9 - obesidade grau I
+35,00 até 39,99 - obesidade grau II 
+≥40.00 - obesidade grau III
+```
 
 ## **Cálculo do risco cardiovascular**
 
